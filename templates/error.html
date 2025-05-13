@@ -1,0 +1,13 @@
+{% extends "base.html" %} {% block title %}Error {{ code }} - {{ name }}{% endblock %} {% block
+content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 text-center">
+    <div class="error-page my-5">
+      <h1 class="display-1 text-danger">{{ code }}</h1>
+      <h2 class="mb-4">{{ name }}</h2>
+      <p class="lead mb-4">{{ description }}</p>
+      <a href="{{ url_for('web.index') }}" class="btn btn-primary">Back to Home</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

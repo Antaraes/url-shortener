@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+env/
+venv/
+ENV/
+*.env
+
+# Flask
+instance/
+.flaskenv
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# SQLite
+*.db
+
+# Pytest
+.cache/
+.pytest_cache/
+
+# Migrations
+migrations/
+
+# Byte-compiled files
+*.log
+*.pot
+*.mo
+
+# Virtual environment
+.env
+.env.*
+
+# Docker
+docker/*.pid
+docker-compose.override.yml
+
+# Test Coverage
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# System files
+Thumbs.db
+desktop.ini
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+
+venv/

@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% block title %}URL Statistics{% endblock %} {% block content %}
+<div class="text-center mb-5">
+  <h1 class="mb-3">URL Statistics</h1>
+  <p class="lead">Performance details for your shortened URL</p>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          Short URL: <span class="text-primary">{{ stats.short_id }}</span>
+        </h5>
+
+        <div class="mb-3">
+          <h6>Original URL:</h6>
+          <p class="text-break">{{ stats.original_url }}</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-3">
+              <div class="card-body text-center">
+                <h1 class="display-4">{{ stats.visit_count }}</h1>
+                <p class="text-muted">Total Visits</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-3">
+              <div class="card-body">
+                <p><strong>Created:</strong> {{ stats.created_at | datetime }}</p>
+                {% if stats.expires_at %}
+                <p><strong>Expires:</strong> {{ stats.expires_at | datetime }}</p>
+                {% else %}
+                <p><strong>Expires:</strong> Never</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-grid gap-2">
+          <a href="{{ url_for('web.index') }}" class="btn btn-primary">Create New URL</a>
+          <a href="{{ stats.short_url }}" target="_blank" class="btn btn-outline-secondary"
+            >Visit URL</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

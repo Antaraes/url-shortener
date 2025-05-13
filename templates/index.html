@@ -1,0 +1,82 @@
+{% extends "base.html" %} {% block title %}URL Shortener - Shorten Your Links{% endblock %} {% block
+content %}
+<div class="text-center mb-5">
+  <h1 class="mb-3">URL Shortener</h1>
+  <p class="lead">Create short, easy-to-share links from long URLs</p>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('web.index') }}">
+          {{ form.hidden_tag() }}
+
+          <div class="mb-3">
+            {{ form.url.label(class="form-label") }} {{ form.url(class="form-control",
+            placeholder="Enter the URL to shorten") }} {% if form.url.errors %}
+            <div class="text-danger">
+              {% for error in form.url.errors %}
+              <small>{{ error }}</small>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
+            {{ form.custom_id.label(class="form-label") }} {{ form.custom_id(class="form-control",
+            placeholder="Optional - Create a custom shortlink") }} {% if form.custom_id.errors %}
+            <div class="text-danger">
+              {% for error in form.custom_id.errors %}
+              <small>{{ error }}</small>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
+            {{ form.expiration_days.label(class="form-label") }} {{
+            form.expiration_days(class="form-control", placeholder="Optional - How many days until
+            expiration") }} {% if form.expiration_days.errors %}
+            <div class="text-danger">
+              {% for error in form.expiration_days.errors %}
+              <small>{{ error }}</small>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="d-grid">{{ form.submit(class="btn btn-primary btn-lg") }}</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Quick & Easy</h5>
+        <p class="card-text">Create shortened URLs with just a few clicks. No sign-up required.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Custom Links</h5>
+        <p class="card-text">Create memorable URLs with custom short IDs of your choice.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Usage Statistics</h5>
+        <p class="card-text">Track how many times your shortened URLs have been accessed.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

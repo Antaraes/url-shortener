@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    expose:
+      - "5000"
+    environment:
+      - FLASK_APP=wsgi.py
+      - FLASK_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/url_shortener
+      - SECRET_KEY=${SECRET_KEY}
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=url_shortener
+    restart: always
+
+  nginx:
+    image: nginx:1.23
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - web
+    restart: always
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+
+volumes:
+  postgres_data:

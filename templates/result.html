@@ -1,0 +1,77 @@
+{% extends "base.html" %} {% block title %}URL Shortened Successfully{% endblock %} {% block content
+%}
+<div class="text-center mb-5">
+  <h1 class="mb-3">URL Shortened Successfully</h1>
+  <p class="lead">Your short URL is ready to use and share</p>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Your Shortened URL</h5>
+
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            id="shortUrl"
+            class="form-control"
+            value="{{ url_data.short_url }}"
+            readonly
+          />
+          <button class="btn btn-outline-secondary" type="button" onclick="copyToClipboard()">
+            Copy
+          </button>
+        </div>
+
+        <div class="mb-4" id="copyMessage" style="display: none">
+          <div class="alert alert-success">URL copied to clipboard!</div>
+        </div>
+
+        <div class="mb-3">
+          <h6>Original URL:</h6>
+          <p class="text-break">{{ url_data.original_url }}</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Created:</strong> {{ url_data.created_at | datetime }}</p>
+          </div>
+          <div class="col-md-6">
+            {% if url_data.expires_at %}
+            <p><strong>Expires:</strong> {{ url_data.expires_at | datetime }}</p>
+            {% else %}
+            <p><strong>Expires:</strong> Never</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="d-grid gap-2">
+          <a href="{{ url_for('web.index') }}" class="btn btn-primary">Create Another</a>
+          <a
+            href="{{ url_for('web.url_stats', short_id=url_data.short_id) }}"
+            class="btn btn-outline-secondary"
+            >View Statistics</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  function copyToClipboard() {
+    var copyText = document.getElementById("shortUrl");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+    document.execCommand("copy");
+
+    var message = document.getElementById("copyMessage");
+    message.style.display = "block";
+
+    setTimeout(function () {
+      message.style.display = "none";
+    }, 2000);
+  }
+</script>
+{% endblock %}
