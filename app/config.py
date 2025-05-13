@@ -38,3 +38,6 @@ config = {
     'production': ProductionConfig,
     'default': DevelopmentConfig
 }
+
+def get_config(config_name):
+    return config.get(config_name, Config)

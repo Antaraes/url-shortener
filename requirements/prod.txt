@@ -1,0 +1,19 @@
+# Import base requirements
+-r base.txt
+
+# Production WSGI server
+gunicorn==21.2.0
+
+# Performance
+blinker==1.7.0
+
+# Monitoring and error tracking
+sentry-sdk[flask]==1.38.0
+
+# Security
+Flask-Talisman==1.1.0 
+Flask-Limiter==3.5.0
+
+# Caching
+Flask-Caching==2.1.0
+redis==5.0.1

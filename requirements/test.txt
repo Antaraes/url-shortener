@@ -1,0 +1,15 @@
+# Import base requirements
+-r base.txt
+
+# Testing frameworks
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-flask==1.3.0
+pytest-mock==3.12.0
+
+# Test data generation
+factory-boy==3.3.0
+Faker==20.1.0
+
+# Code coverage
+coverage==7.3.2

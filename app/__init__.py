@@ -1,45 +1,42 @@
-def register_commands(app):
-    """Register custom Flask CLI commands."""
+from datetime import datetime
+from flask import Flask
+from app.config import config
+from app.extensions import db, migrate, csrf
+
+def create_app(config_name='development'):
+    """
+    Application factory function to create and configure the Flask app.
     
-    @app.cli.command("clean-expired")
-    def clean_expired():
-        """Remove expired URLs from the database."""
-        from app.models.url import URL
-        from datetime import datetime
+    Args:
+        config_name (str): Configuration environment to use
         
-        with app.app_context():
-            expired = URL.query.filter(
-                URL.expires_at.isnot(None),
-                URL.expires_at < datetime.utcnow()
-            ).delete()
-            
-            db.session.commit()
-            print(f"Removed {expired} expired URLs.")
+    Returns:
+        Flask: The configured Flask application
+    """
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])
     
-    @app.cli.command("stats")
-    def url_stats():
-        """Show basic statistics about the application."""
-        from app.models.url import URL
-        from sqlalchemy import func
-        
-        with app.app_context():
-            total_urls = URL.query.count()
-            total_clicks = db.session.query(func.sum(URL.visit_count)).scalar() or 0
-            
-            print(f"Total URLs: {total_urls}")
-            print(f"Total Clicks: {total_clicks}")
-            
-            if total_urls > 0:
-                avg_clicks = total_clicks / total_urls
-                print(f"Average Clicks per URL: {avg_clicks:.2f}")
-                
-                # Most popular URLs
-                popular = URL.query.order_by(URL.visit_count.desc()).limit(5).all()
-                
-                if popular:
-                    print("\nMost Popular URLs:")
-                    for url in popular:
-                        print(f"/{url.short_id} → {url.visit_count} clicks")
+    # Initialize extensions
+    db.init_app(app)
+    migrate.init_app(app, db)
+    csrf.init_app(app)
     
-    # Call this function in create_app
-    # register_commands(app)
+    # Register blueprints
+    from app.api.routes import api_bp
+    from app.web.routes import web_bp
+    app.register_blueprint(api_bp)
+    app.register_blueprint(web_bp)
+
+    @app.template_filter('datetime')
+    def format_datetime(value, format='%Y-%m-%d %H:%M:%S'):
+        """Format a datetime object."""
+        if value is None:
+            return ""
+        if isinstance(value, str):
+            try:
+                value = datetime.fromisoformat(value)
+            except ValueError:
+                return value
+        return value.strftime(format)
+    
+    return app
